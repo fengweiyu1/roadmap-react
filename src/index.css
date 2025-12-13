@@ -1,0 +1,112 @@
+/* ===== 全局 ===== */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  background: #ffffff;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.rf-wrap {
+  width: 100%;
+  height: 100vh;
+  background: #ffffff;
+}
+
+/* ===== 普通节点（白色卡片） ===== */
+.rm-node {
+  min-width: 150px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  position: relative;
+
+  background: #ffffff;
+  color: #111827;
+
+  /* 关键：靠阴影区分 */
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 1px 3px rgba(15, 23, 42, 0.04);
+
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  text-align: center;
+}
+
+.rm-node-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.rm-dot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 4px rgba(255,255,255,.9);
+}
+
+/* ===== React Flow 的 handle：默认隐藏 ===== */
+.rm-handle {
+  width: 8px !important;
+  height: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  opacity: 0;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  border: 0;
+}
+
+/* ===== Group / Combo 框 ===== */
+.rm-group {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+
+  background: #ffffff;
+
+  /* 比节点更“柔”的阴影 */
+  box-shadow:
+    0 12px 30px rgba(15, 23, 42, 0.06),
+    0 4px 10px rgba(15, 23, 42, 0.04);
+
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Group 标题（浮在上面） */
+.rm-group-title {
+  position: absolute;
+  top: -12px;
+  left: 16px;
+
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  background: #ffffff;
+  color: #374151;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+/* ===== 边的颜色（更柔） ===== */
+.react-flow__edge-path {
+  stroke: #9ca3af;
+  stroke-width: 2;
+}
+
+/* ===== 背景点阵（更淡） ===== */
+.react-flow__background {
+  background-color: #ffffff;
+}
+
+.react-flow__background pattern circle {
+  fill: rgba(0, 0, 0, 0.05);
+}
