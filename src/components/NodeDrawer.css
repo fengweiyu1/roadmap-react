@@ -1,0 +1,261 @@
+/* 遮罩层 */
+.nd-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.25);
+  z-index: 9999;
+}
+
+/* 右侧抽屉 */
+.nd-drawer{
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(520px, 92vw);
+  background: #fff;
+  border-left: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: -24px 0 60px rgba(15, 23, 42, 0.12);
+  padding: 28px 28px 32px;
+  overflow: auto;
+}
+
+/* 关闭按钮 */
+.nd-close{
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  background: #fff;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 32px;
+}
+
+/* 标题/文本 */
+.nd-title{
+  font-size: 34px;
+  font-weight: 800;
+  margin: 10px 0 22px;
+}
+
+.nd-section{ margin-top: 18px; }
+.nd-h2{
+  font-size: 20px;
+  font-weight: 800;
+  margin: 18px 0 10px;
+}
+
+.nd-desc{
+  margin: 0;
+  color: rgba(15, 23, 42, 0.82);
+  line-height: 1.7;
+}
+
+/* 空状态 */
+.nd-empty{
+  padding: 12px 14px;
+  border: 1px dashed rgba(15, 23, 42, 0.18);
+  border-radius: 12px;
+  color: rgba(15, 23, 42, 0.55);
+  background: rgba(248, 250, 252, 0.75);
+}
+
+/* 表格容器 */
+.nd-tableWrap{
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(248, 250, 252, 0.65);
+}
+
+/* 超过 5 条才滚动（每行约 52px，可按你实际调） */
+.nd-tableWrap.is-scroll{
+  max-height: 260px;     /* ≈ 5 rows */
+  overflow: auto;
+}
+
+/* 表格本体 */
+.nd-table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.nd-row{
+  background: #fff;
+}
+.nd-row + .nd-row{
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.nd-td{
+  padding: 14px 14px;
+  vertical-align: middle;
+}
+
+.nd-tdTitle{
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.nd-link{
+  color: rgba(15, 23, 42, 0.9);
+  text-decoration: none;
+}
+.nd-link:hover{
+  text-decoration: underline;
+}
+
+.nd-tdGo{
+  width: 52px;
+  text-align: right;
+}
+
+.nd-go{
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  color: rgba(15, 23, 42, 0.75);
+  text-decoration: none;
+  background: rgba(248, 250, 252, 0.8);
+}
+.nd-go:hover{
+  background: #fff;
+}
+
+
+.nd-divider{
+  height: 1px;
+  background: rgba(15, 23, 42, 0.10);
+  margin: 22px 0;
+}
+
+
+.nd-section--tutorial {
+  padding-bottom: 8px;
+}
+
+/* 教程的 table 容器：最小高度 */
+.nd-section--tutorial .nd-tableWrap{
+  min-height: 160px;
+  padding: 10px;                 /* 关键：让它更像内容区 */
+  background: rgba(248, 250, 252, 0.85);
+}
+
+.nd-section--tutorial .nd-table{
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+
+
+.nd-section--problem .nd-tableWrap {
+  background: transparent;
+  border-radius: 10px;
+}
+
+
+/* 教程：允许更高一些再滚动 */
+.nd-section--tutorial .nd-tableWrap.is-scroll {
+  max-height: 320px;
+}
+
+/* 习题：更像刷题列表 */
+.nd-section--problem .nd-tableWrap.is-scroll {
+  max-height: 260px;
+}
+
+
+/* .nd-title { color: red !important; } */
+
+
+
+
+/* 进度条容器：占满节点宽度，靠下 */
+.rm-pbar{
+  margin-top: 6px;
+  width: 100%;
+  padding: 0 2px;
+}
+
+/* 轨道：细、圆角、浅灰 */
+.rm-pbarTrack{
+  height: 6px;
+  width: 100%;
+  background: rgba(15, 23, 42, 0.10);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/* 填充：颜色别太艳，过渡顺滑 */
+.rm-pbarFill{
+  height: 100%;
+  background: rgba(59, 130, 246, 0.85);
+  border-radius: 999px;
+  transition: width 220ms ease;
+}
+
+
+/* =========================
+   Drawer 顶部进度条（图2风格）
+   ========================= */
+
+.nd-progress{
+  margin: 0 0 10px;
+}
+
+.nd-progressTop{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 4px 0 18px;
+}
+
+.nd-pill{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.10);
+  color: rgba(37, 99, 235, 0.95);
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* 轨道：必须 flex:1 才会拉伸成一条横条 */
+.nd-track{
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.10);
+  overflow: hidden;
+}
+
+/* 填充：必须 display:block + height:100% 才会可见 */
+.nd-fill{
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.75);
+  transition: width 220ms ease;
+}
+
+.nd-count{
+  min-width: 48px;
+  text-align: right;
+  font-weight: 700;
+  color: rgba(15, 23, 42, 0.55);
+}

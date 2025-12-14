@@ -18,7 +18,7 @@ html, body, #root {
   min-width: 150px;
   padding: 12px 14px;
   border-radius: 14px;
-  position: relative;
+
 
   background: #ffffff;
   color: #111827;
@@ -69,13 +69,15 @@ html, body, #root {
 
   background: #ffffff;
 
-  /* 比节点更“柔”的阴影 */
+  /* 比节点更“柔”的阴影 */ 
   box-shadow:
     0 12px 30px rgba(15, 23, 42, 0.06),
     0 4px 10px rgba(15, 23, 42, 0.04);
 
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
+
+
 
 /* Group 标题（浮在上面） */
 .rm-group-title {
@@ -110,3 +112,42 @@ html, body, #root {
 .react-flow__background pattern circle {
   fill: rgba(0, 0, 0, 0.05);
 }
+
+
+
+/* 点击节点从右往左滑动draw */
+.node-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 420px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -12px 0 40px rgba(0,0,0,0.08);
+  padding: 24px;
+  z-index: 1000;
+
+  animation: slideIn 0.25s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.node-drawer__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.node-drawer h3 {
+  margin-top: 24px;
+}
+
+
+
