@@ -79,6 +79,9 @@ html, body, #root {
 
 
 
+
+
+
 /* Group 标题（浮在上面） */
 .rm-group-title {
   position: absolute;
@@ -98,6 +101,24 @@ html, body, #root {
     0 4px 10px rgba(15, 23, 42, 0.08);
 }
 
+/* group 标题（如：大数据组件 / 数据仓库 / SQL练习） */
+.rm-group-badge{
+  font-size: 18px;          /* 原来大概 12~14，这里直接拉大 */
+  font-weight: 800;         /* 更像分组标题 */
+  letter-spacing: 0.5px;
+  color: rgba(15, 23, 42, 0.9);
+
+  /* 让它更“标题化” */
+  padding: 6px 12px;
+  border-radius: 10px;
+
+  /* 可选：轻微底色，增强层级 */
+  background: rgba(248, 250, 252, 0.9);
+
+  /* 居中 */
+  display: inline-block;
+}
+
 /* ===== 边的颜色（更柔） ===== */
 .react-flow__edge-path {
   stroke: #9ca3af;
@@ -115,7 +136,7 @@ html, body, #root {
 
 
 
-/* 点击节点从右往左滑动draw */
+/* 点击节点从右往左滑动draw
 .node-drawer {
   position: fixed;
   top: 0;
@@ -128,7 +149,7 @@ html, body, #root {
   z-index: 1000;
 
   animation: slideIn 0.25s ease-out;
-}
+} */
 
 @keyframes slideIn {
   from {

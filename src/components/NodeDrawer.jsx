@@ -139,7 +139,7 @@ export default function NodeDrawer({ node, onClose, progressMap = {}, onToggleIt
         <Divider />
 
         <section className="nd-section nd-section--problem">
-          <h2 className="nd-h2">习题</h2>
+          <h2 className="nd-h2">习题-检测学习成果</h2>
           {problems.length ? (
             <ChecklistTable
               nodeId={nodeId}
