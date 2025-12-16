@@ -12,8 +12,12 @@ import ReactFlow, {
 } from 'reactflow'
 import 'reactflow/dist/style.css'
 
+
+
+
 import RoadmapNode from './components/RoadmapNode'
 import {
+  whoami,
   fetchRoadmapProgress,
   markItemDone,
   unmarkItemDone,
@@ -30,127 +34,16 @@ function GroupNode({ data }) {
   )
 }
 
-
-function computeNodeProgress(node, progressMap) {
-  const nodeId = node.id;
-  const tutorials = node.data?.tutorials || [];
-  const problems = node.data?.problems || [];
-  const items = [...tutorials, ...problems];
-
-  const total = items.length;
-  if (total === 0) return { done: 0, total: 0 };
-
-  const checkedMap = progressMap[nodeId] || {};
-  const done = items.reduce((acc, it) => {
-    const key = it.id || it.title;
-    return acc + (checkedMap[key] ? 1 : 0);
-  }, 0);
-
-  return { done, total };
-}
-
 // ✅ node.type 必须和这里的 key 一一对应
 const nodeTypes = {
   roadmap: RoadmapNode,
   group: GroupNode,
 }
 
-// ✅ 固定参数（先写死，后面接 Ghost 登录再换）
+// ✅ 固定参数（roadmapId 可以先写死）
 const ROADMAP_ID = 'china_de_roadmap'
-const USER_ID = 'api_test_user'
 
-// ============ Nodes ============
-// const initialNodes = [
-  
-//   { id: '0', type: 'roadmap', data: { label: 'Road Map', level: 'low' }, position: { x: 420, y: 20 } },
-//   // { id: '1', type: 'roadmap', data: { label: '大数据组件', level: 'low' }, position: { x: 80, y: 140 } },
-//   // { id: '2', type: 'roadmap', data: { label: '数据仓库', level: 'low' }, position: { x: 320, y: 140 } },
-//   // { id: '3', type: 'roadmap', data: { label: 'SQL', level: 'low' }, position: { x: 560, y: 140 } },
-//   // { id: '4', type: 'roadmap', data: { label: '算法', level: 'low' }, position: { x: 800, y: 140 } },
-
-//   {
-//     id: 'A',
-//     type: 'group',
-//     position: { x: 40, y: 180 },
-//     data: { label: '大数据组件' },
-//     style: { width: 220, height: 190 },
-//   },
-//   { id: '5', type: 'roadmap', data: { label: 'Hadoop', level: 'low' }, position: { x: 20, y: 50 }, parentId: 'A', extent: 'parent' },
-//   { id: '6', type: 'roadmap', data: { label: 'Spark', level: 'low' }, position: { x: 20, y: 120 }, parentId: 'A', extent: 'parent' },
-//   // { id: '25', type: 'roadmap', data: { label: 'Hive', level: 'low' }, position: { x: 20, y: 180 }, parentId: 'A', extent: 'parent' },
-//   { id: '7', type: 'roadmap', data: { label: '数据仓库八股', level: 'low' }, position: { x: 320, y: 300 } },
-
-//   {
-//     id: 'C',
-//     type: 'group',
-//     position: { x: 520, y: 240 },
-//     data: { label: 'SQL练习' },
-//     style: { width: 220, height: 190 },
-//   },
-//   { id: '8', type: 'roadmap', data: { label: '基本SQL', level: 'low' }, position: { x: 20, y: 50 }, parentId: 'C', extent: 'parent' },
-//   { id: '9', type: 'roadmap', data: { label: 'medium', level: 'low' }, position: { x: 20, y: 120 }, parentId: 'C', extent: 'parent' },
-
-//   {
-//     id: 'D',
-//     type: 'group',
-//     position: { x: 760, y: 240 },
-//     data: { label: '算法练习' },
-//     style: { width: 250, height: 250 },
-//   },
-//   { id: '10', type: 'roadmap', data: { label: '数组与字符串', level: 'low' }, position: { x: 20, y: 50 }, parentId: 'D', extent: 'parent' },
-//   { id: '11', type: 'roadmap', data: { label: '哈希表', level: 'low' }, position: { x: 20, y: 120 }, parentId: 'D', extent: 'parent' },
-//   { id: '12', type: 'roadmap', data: { label: '栈与队列', level: 'low' }, position: { x: 20, y: 190 }, parentId: 'D', extent: 'parent' },
-
-//   { id: '13', type: 'roadmap', data: { label: '简历', level: 'low' }, position: { x: 320, y: 460 } },
-
-//   {
-//     id: 'E',
-//     type: 'group',
-//     position: { x: 40, y: 520 },
-//     data: { label: 'E' },
-//     style: { width: 220, height: 190 },
-//   },
-//   { id: '14', type: 'roadmap', data: { label: 'Flink', level: 'low' }, position: { x: 20, y: 50 }, parentId: 'E', extent: 'parent' },
-//   { id: '15', type: 'roadmap', data: { label: 'Kafka', level: 'low' }, position: { x: 20, y: 120 }, parentId: 'E', extent: 'parent' },
-
-//   { id: '16', type: 'roadmap', data: { label: 'hard sql', level: 'mid' }, position: { x: 560, y: 460 } },
-
-//   {
-//     id: 'G',
-//     type: 'group',
-//     position: { x: 760, y: 540 },
-//     data: { label: 'G' },
-//     style: { width: 250, height: 250 },
-//   },
-//   {
-//     id: '17',
-//     type: 'roadmap',
-//     data: {
-//       label: '链表',
-//       level: 'mid',
-//       description: '链表是一种线性数据结构，适合频繁插入删除。',
-//       tutorials: [
-//         { id: 'll-basic', title: '链表基础原理', url: '/blog/linked-list-basic' },
-//         { id: 'll-ops', title: '链表常见操作', url: '/blog/linked-list-ops' },
-//       ],
-//       problems: [
-//         { id: 'lc-206', title: '206. 反转链表', url: '/leetcode/206' },
-//         { id: 'lc-707', title: '707. 设计链表', url: '/leetcode/707' },
-//       ],
-//     },
-//     position: { x: 20, y: 50 },
-//     parentId: 'G',
-//     extent: 'parent',
-//   },
-
-//   { id: '18', type: 'roadmap', data: { label: 'DFS & BFS', level: 'mid' }, position: { x: 20, y: 120 }, parentId: 'G', extent: 'parent' },
-//   { id: '19', type: 'roadmap', data: { label: '二叉树', level: 'mid' }, position: { x: 20, y: 190 }, parentId: 'G', extent: 'parent' },
-
-//   { id: '20', type: 'roadmap', data: { label: '项目', level: 'mid' }, position: { x: 320, y: 600 } },
-//   { id: '21', type: 'roadmap', data: { label: '高级场景题', level: 'high' }, position: { x: 320, y: 690 } },
-//   { id: '22', type: 'roadmap', data: { label: '贪心与动态规划', level: 'high' }, position: { x: 800, y: 840 } },
-// ]
-
+// ================= Nodes（保持你原样）=================
 const initialNodes = [
   {
     id: '0',
@@ -198,25 +91,6 @@ const initialNodes = [
   },
 
   {
-    id: '6',
-    type: 'roadmap',
-    position: { x: 20, y: 190 },
-    parentId: 'A',
-    extent: 'parent',
-    data: {
-      label: 'Spark',
-      level: 'low',
-      description: 'Spark Core / SQL / Streaming。',
-      plan: '1天',
-      tutorials: [
-        { id: 'Spark-1', title: 'Spark-1', url: '/blog/linked-list-basic' },
-        { id: 'Spark-2', title: 'Spark-2', url: '/blog/linked-list-basic' },
-      ],
-      problems: [],
-    },
-  },
-
-  {
     id: '25',
     type: 'roadmap',
     position: { x: 20, y: 120 },
@@ -235,8 +109,26 @@ const initialNodes = [
     },
   },
 
-  // ===================== Data Warehouse 八股 =====================
+  {
+    id: '6',
+    type: 'roadmap',
+    position: { x: 20, y: 190 },
+    parentId: 'A',
+    extent: 'parent',
+    data: {
+      label: 'Spark',
+      level: 'low',
+      description: 'Spark Core / SQL / Streaming。',
+      plan: '1天',
+      tutorials: [
+        { id: 'Spark-1', title: 'Spark-1', url: '/blog/linked-list-basic' },
+        { id: 'Spark-2', title: 'Spark-2', url: '/blog/linked-list-basic' },
+      ],
+      problems: [],
+    },
+  },
 
+  // ===================== Data Warehouse =====================
   {
     id: 'I',
     type: 'group',
@@ -275,7 +167,6 @@ const initialNodes = [
         { id: 'dataskew', title: '数据倾斜', url: '/blog/linked-list-basic' },
         { id: 'small files', title: '小文件问题', url: '/blog/linked-list-basic' },
         { id: 'scd', title: '缓慢变化维度', url: '/blog/linked-list-basic' },
-   
       ],
       problems: [],
     },
@@ -406,8 +297,7 @@ const initialNodes = [
     },
   },
 
-  // ===================== 简历 =====================
-  
+  // ===================== 简历与冲刺阶段 =====================
   {
     id: 'H',
     type: 'group',
@@ -415,7 +305,7 @@ const initialNodes = [
     data: { label: '简历与冲刺阶段' },
     style: { width: 220, height: 320 },
   },
-  
+
   {
     id: '13',
     type: 'roadmap',
@@ -629,7 +519,7 @@ const initialNodes = [
   {
     id: '55',
     type: 'roadmap',
-    position: { x: 300, y:  710},
+    position: { x: 300, y: 710 },
     data: {
       label: '面经',
       level: 'high',
@@ -667,29 +557,19 @@ const initialNodes = [
   },
 ]
 
-// ============ Edges ============
+// ================= Edges（保持你原样）=================
 const initialEdges = [
   { id: 'edge-01', source: '0', target: 'A' },
   { id: 'edge-02', source: '0', target: 'I' },
   { id: 'edge-03', source: '0', target: 'C' },
   { id: 'edge-04', source: '0', target: 'D' },
   { id: 'edge-IH', source: 'I', target: 'H' },
-
-  // { id: 'edge-1A', source: '1', target: 'A' },
-  // { id: 'edge-27', source: '2', target: '7' },
-  // { id: 'edge-3C', source: '3', target: 'C' },
-  // { id: 'edge-4D', source: '4', target: 'D' },
-
   { id: 'edge-AE', source: 'A', target: 'E' },
   { id: 'edge-AH', source: 'A', target: 'H' },
-  // { id: 'edge-713', source: '7', target: '13' },
-
   { id: 'edge-C16', source: 'C', target: '16' },
   { id: 'edge-DG', source: 'D', target: 'G' },
-
   { id: 'edge-1320', source: '13', target: '20' },
   { id: 'edge-1321', source: '13', target: '21' },
-
   { id: 'edge-G22', source: 'G', target: '22' },
 ].map((e) => ({
   ...e,
@@ -703,52 +583,103 @@ export default function RoadmapFlow() {
   const [edges, , onEdgesChange] = useEdgesState(initialEdges)
   const [activeNode, setActiveNode] = useState(null)
 
+  // ✅ userId 就用 email（未绑定前 = null）
+  const [userId, setUserId] = useState(null)
+
   // ✅ 进度：{ [nodeId]: { [itemId]: true } }
   const [progressMap, setProgressMap] = useState({})
 
-  // ✅ 首次加载：从后端拉取进度
+  // 1) 等待 App.jsx 绑定 email（或直接从 window 读到）
+  // 1) 等待 App.jsx 绑定 email（或直接从 window 读到）
   useEffect(() => {
-    fetchRoadmapProgress({ roadmapId: ROADMAP_ID, userId: USER_ID })
-      .then(setProgressMap)
-      .catch((e) => console.error('[progress] fetch failed', e))
+    // 页面已存在绑定（iframe load 之前已注入）
+    if (window.__ROADMAP_USER_EMAIL__) {
+      setUserId(window.__ROADMAP_USER_EMAIL__)
+    }
+
+    // 等待 App.jsx 派发事件
+    function onReady() {
+      if (window.__ROADMAP_USER_EMAIL__) {
+        setUserId(window.__ROADMAP_USER_EMAIL__)
+      }
+    }
+
+    window.addEventListener('roadmap:user-ready', onReady)
+    return () => window.removeEventListener('roadmap:user-ready', onReady)
   }, [])
 
+  // 2) userId 拿到后拉取进度（未登录不拉）
   useEffect(() => {
-  setNodes((prevNodes) =>
-    prevNodes.map((node) => {
-      if (node.type !== 'roadmap') return node;
+    if (!userId) return
 
-      const tutorials = node.data?.tutorials || [];
-      const problems = node.data?.problems || [];
-      const items = [...tutorials, ...problems];
+    fetchRoadmapProgress({ roadmapId: ROADMAP_ID, userId })
+      .then((data) => {
+        // 兼容后端可能返回 null/undefined
+        setProgressMap(data || {})
+      })
+      .catch((e) => {
+        console.error('[progress] fetch failed', e)
+        setProgressMap({})
+      })
+  }, [userId])
 
-      const total = items.length;
-      const checkedMap = progressMap[node.id] || {};
-      const done = items.reduce((acc, it) => {
-        const key = it.id || it.title;
-        return acc + (checkedMap[key] ? 1 : 0);
-      }, 0);
+  // 3) 把进度写回到 node.data.progress（显示进度条）
+  useEffect(() => {
+    setNodes((prev) =>
+      prev.map((node) => {
+        if (node.type !== 'roadmap') return node
 
-      return {
-        ...node,
-        data: {
-          ...node.data,
-          progress: { done, total },
-        },
-      };
-    })
-  );
-}, [progressMap]);
+        const tutorials = node.data?.tutorials || []
+        const problems = node.data?.problems || []
 
-  // ✅ 勾选/取消：调用后端 + 本地更新
+        // ✅ 只统计有 id 的 item（不再用 title fallback）
+        const items = [...tutorials, ...problems].filter((it) => it?.id)
+
+        const total = items.length
+        const checkedMap = progressMap[node.id] || {}
+
+        const done = items.reduce((acc, it) => {
+          const key = it.id
+          return acc + (checkedMap[key] ? 1 : 0)
+        }, 0)
+
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            progress: { done, total },
+          },
+        }
+      })
+    )
+  }, [progressMap, setNodes])
+
+  // ✅ 勾选/取消：调用后端 + 本地更新（userId = email）
   async function toggleItem({ nodeId, itemId, checked }) {
+    // ✅ 未登录（userId 没绑定）不允许写库
+    if (!userId) {
+      alert(
+        '您未登录，进度将不会被保存。\n为了您的学习体验，请登录后再使用该学习路径图。'
+      )
+    return
+      console.warn('[toggleItem] blocked: user not logged in')
+      return
+    }
+
+    // ✅ itemId 必须是稳定的 it.id
+    if (!itemId) {
+      console.warn('[toggleItem] blocked: missing itemId')
+      return
+    }
+
     try {
       if (checked) {
-        await markItemDone({ roadmapId: ROADMAP_ID, nodeId, itemId, userId: USER_ID })
+        await markItemDone({ roadmapId: ROADMAP_ID, nodeId, itemId, userId })
       } else {
-        await unmarkItemDone({ roadmapId: ROADMAP_ID, nodeId, itemId, userId: USER_ID })
+        await unmarkItemDone({ roadmapId: ROADMAP_ID, nodeId, itemId, userId })
       }
 
+      // 本地同步（乐观更新）
       setProgressMap((prev) => {
         const next = { ...prev }
         if (checked) {
@@ -765,7 +696,6 @@ export default function RoadmapFlow() {
       })
     } catch (e) {
       console.error('[toggleItem] failed', e)
-      // 这里先不做 UI toast，先保证链路正确
     }
   }
 
@@ -783,6 +713,7 @@ export default function RoadmapFlow() {
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        proOptions={{ hideAttribution: true }}
         nodeTypes={nodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
         onNodesChange={onNodesChange}
@@ -795,7 +726,7 @@ export default function RoadmapFlow() {
       >
         <Background variant="dots" gap={16} size={1} />
         <Controls />
-        <MiniMap pannable zoomable />
+        {/* <MiniMap pannable zoomable /> */}
       </ReactFlow>
 
       <NodeDrawer
@@ -803,12 +734,9 @@ export default function RoadmapFlow() {
         onClose={() => setActiveNode(null)}
         progressMap={progressMap}
         onToggleItem={toggleItem}
+        // 可选：把 userId 传给 Drawer 做 UI 提示（未登录显示“请先登录”）
+        userId={userId}
       />
     </div>
   )
 }
-
-
-
-
-

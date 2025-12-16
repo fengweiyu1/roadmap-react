@@ -1,33 +1,61 @@
-const API_BASE = '/api'; 
-// ⚠️ 注意：用相对路径，走 nginx，不要写域名
+// src/api/roadmap.js
+const API_BASE = '/api'; // 走 nginx，同域相对路径
 
-export async function fetchRoadmapProgress({ roadmapId, userId }) {
-  const res = await fetch(
-    `${API_BASE}/roadmaps/${roadmapId}/progress?user_id=${userId}`,
-    { credentials: 'include' }
-  );
-  if (!res.ok) throw new Error('fetch progress failed');
-  return res.json();
+function enc(v) {
+  return encodeURIComponent(String(v ?? ''));
 }
 
-export async function markItemDone({ roadmapId, nodeId, itemId, userId }) {
-  const res = await fetch(
-    `${API_BASE}/roadmaps/${roadmapId}/nodes/${nodeId}/items/${itemId}`,
+async function request(path, { method = 'GET', body, headers } = {}) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method,
+    credentials: 'include', // ✅ 所有请求都带上（为 Ghost 登录态做准备）
+    headers: {
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...(headers || {}),
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  // 统一处理非 2xx
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`[${method}] ${path} -> ${res.status} ${text}`);
+  }
+
+  // 兼容空响应
+  const ct = res.headers.get('content-type') || '';
+  if (ct.includes('application/json')) return res.json();
+  return res.text();
+}
+
+// ✅ whoami：前端启动先拿 user_id（现在你可以先返回 anon / api_test_user）
+export function whoami() {
+  return request(`/roadmap/whoami`, { method: 'GET' });
+}
+
+// ✅ 获取进度
+export function fetchRoadmapProgress({ roadmapId, userId }) {
+  return request(
+    `/roadmaps/${enc(roadmapId)}/progress?user_id=${enc(userId)}`,
+    { method: 'GET' }
+  );
+}
+
+// ✅ 勾选完成（PUT）
+export function markItemDone({ roadmapId, nodeId, itemId, userId }) {
+  return request(
+    `/roadmaps/${enc(roadmapId)}/nodes/${enc(nodeId)}/items/${enc(itemId)}`,
     {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_id: userId }),
+      body: { user_id: userId }, // body 里放 user_id
     }
   );
-  if (!res.ok) throw new Error('mark done failed');
-  return res.json();
 }
 
-export async function unmarkItemDone({ roadmapId, nodeId, itemId, userId }) {
-  const res = await fetch(
-    `${API_BASE}/roadmaps/${roadmapId}/nodes/${nodeId}/items/${itemId}?user_id=${userId}`,
+// ✅ 取消完成（DELETE）
+export function unmarkItemDone({ roadmapId, nodeId, itemId, userId }) {
+  return request(
+    `/roadmaps/${enc(roadmapId)}/nodes/${enc(nodeId)}/items/${enc(itemId)}?user_id=${enc(userId)}`,
     { method: 'DELETE' }
   );
-  if (!res.ok) throw new Error('unmark done failed');
-  return res.json();
 }
