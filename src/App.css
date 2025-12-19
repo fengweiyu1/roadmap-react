@@ -94,10 +94,9 @@
 
 
 /* group 外框（真正包裹子节点的那一层） */
-
-.react-flow__node-groupNode {
+.react-flow__node-group {
   background: #fff;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.04); /* 减淡边框，避免深色描边 */
   border-radius: 18px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
   padding: 44px 16px 16px; /* 顶部留出标题区 */
