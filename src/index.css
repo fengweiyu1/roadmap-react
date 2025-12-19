@@ -30,6 +30,12 @@ html, body, #root {
 
   border: 1px solid rgba(0, 0, 0, 0.04);
   text-align: center;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.rm-label {
+  color: #111827;
+  transition: color 160ms ease;
 }
 
 .rm-node-title {
@@ -77,6 +83,26 @@ html, body, #root {
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+.rm-node:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 10px 24px rgba(15, 23, 42, 0.12),
+    0 4px 10px rgba(15, 23, 42, 0.08),
+    0 0 0 8px rgba(56, 189, 248, 0.14); /* 柔和蓝绿色光晕 */
+}
+
+.rm-node:active {
+  transform: translateY(0) scale(0.985);
+  box-shadow:
+    0 6px 16px rgba(15, 23, 42, 0.14),
+    0 2px 6px rgba(15, 23, 42, 0.10),
+    0 0 0 10px rgba(56, 189, 248, 0.12); /* 点击时稍强一点的光晕 */
+}
+
+.rm-node:hover .rm-label {
+  color: #f97316; /* 橙色提示 hover */
+}
+
 
 
 
@@ -117,6 +143,14 @@ html, body, #root {
 
   /* 居中 */
   display: inline-block;
+}
+
+/* 覆盖 React Flow 默认 group 外框，去掉深色描边 */
+.react-flow__node-group {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
 }
 
 /* ===== 边的颜色（更柔） ===== */
@@ -169,6 +203,3 @@ html, body, #root {
 .node-drawer h3 {
   margin-top: 24px;
 }
-
-
-
