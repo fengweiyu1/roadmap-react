@@ -1,16 +1,34 @@
-# React + Vite
+# 项目说明（React + Vite）
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+这是一个使用 Vite 搭建的 React 前端项目。以下内容介绍如何在本地安装依赖、运行开发服务器、构建产物以及把构建结果上传到远端服务器。
 
-Currently, two official plugins are available:
+## 环境准备
+- Node.js 18+（已在仓库中使用 npm）
+- npm 包管理器
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+安装依赖：
+```bash
+npm install
+```
 
-## React Compiler
+## 本地开发
+启动开发服务器（默认端口 5173）：
+```bash
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 构建生产环境产物
+运行构建命令后，会在 `dist/` 目录下生成静态资源：
+```bash
+npm run build
+```
 
-## Expanding the ESLint configuration
+## 将构建结果上传到远端
+构建完成后，可通过以下命令把 `dist` 目录内容上传到目标服务器（使用指定的私钥和路径）：
+```bash
+scp -i ~/.ssh/id_rsa -o IdentitiesOnly=yes -r dist/* ubuntu@119.28.179.118:/home/ubuntu/ghost-blog/roadmap-dist/
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 其他说明
+- 需要确保本机具备访问远端服务器的网络和 SSH 权限。
+- 如果上传失败，请检查密钥路径、服务器可达性以及目标目录的写入权限。
