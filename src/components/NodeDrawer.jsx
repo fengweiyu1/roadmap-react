@@ -2,6 +2,20 @@
 import React, { useMemo } from 'react'
 import './NodeDrawer.css'
 
+const LEVEL_COLOR = {
+  low: '#22c55e', // green
+  mid: '#f59e0b', // amber
+  high: '#ef4444', // red
+}
+
+function getLevelColor(title = '', nodeLevel) {
+  if (title.includes('高级')) return LEVEL_COLOR.high
+  if (title.includes('中级')) return LEVEL_COLOR.mid
+  if (title.includes('初级')) return LEVEL_COLOR.low
+  if (nodeLevel && LEVEL_COLOR[nodeLevel]) return LEVEL_COLOR[nodeLevel]
+  return '#9ca3af' // default gray
+}
+
 function safeKey(it) {
   // ✅ 只允许稳定 id；不要用 title 兜底（会和后端 item_id 不一致）
   return it?.id
@@ -23,7 +37,7 @@ function ProgressBar({ done, total }) {
   )
 }
 
-function ChecklistTable({ nodeId, items = [], checkedMap = {}, onToggleItem }) {
+function ChecklistTable({ nodeId, nodeLevel, items = [], checkedMap = {}, onToggleItem }) {
   const scroll = items.length > 5
 
   return (
@@ -35,6 +49,7 @@ function ChecklistTable({ nodeId, items = [], checkedMap = {}, onToggleItem }) {
             .map((it) => {
               const itemId = safeKey(it) // = it.id
               const checked = !!checkedMap?.[itemId]
+              const levelColor = getLevelColor(it?.title, nodeLevel)
 
               return (
                 <tr key={itemId} className={`nd-row ${checked ? 'is-checked' : ''}`}>
@@ -54,6 +69,7 @@ function ChecklistTable({ nodeId, items = [], checkedMap = {}, onToggleItem }) {
                   </td>
 
                   <td className="nd-td nd-tdTitle">
+                    <span className="nd-dot" style={{ background: levelColor }} aria-hidden="true" />
                     <a className="nd-link" href={it.url} target="_blank" rel="noreferrer">
                       {it.title}
                     </a>
@@ -69,6 +85,8 @@ function ChecklistTable({ nodeId, items = [], checkedMap = {}, onToggleItem }) {
             })}
         </tbody>
       </table>
+
+      {scroll ? <div className="nd-fade" aria-hidden="true" /> : null}
 
       {/* ✅ 如果有 items 但缺 id，给你个提示（开发期很重要） */}
       {items.length > 0 && items.some((it) => !it?.id) ? (
@@ -93,64 +111,79 @@ export default function NodeDrawer({ node, onClose, progressMap = {}, onToggleIt
   const tutorials = node?.data?.tutorials ?? []
   const problems = node?.data?.problems ?? []
 
+  // 仅展示带 id 的条目（避免空行）
+  const tutorialsItems = useMemo(() => tutorials.filter((it) => !!it?.id), [tutorials])
+  const problemsItems = useMemo(() => problems.filter((it) => !!it?.id), [problems])
+
   const nodeCheckedMap = progressMap?.[nodeId] || {}
 
   // ✅ 计算进度：done/total（按 it.id）
   const { done, total } = useMemo(() => {
-    const all = [...tutorials, ...problems].filter((it) => !!it?.id)
+    const all = [...tutorialsItems, ...problemsItems]
     const keys = all.map((it) => it.id)
     const total = keys.length
     const done = keys.reduce((acc, k) => acc + (nodeCheckedMap?.[k] ? 1 : 0), 0)
     return { done, total }
-  }, [tutorials, problems, nodeCheckedMap])
+  }, [tutorialsItems, problemsItems, nodeCheckedMap])
 
   return (
     <div className="nd-overlay" onClick={onClose}>
       <aside className="nd-drawer" onClick={(e) => e.stopPropagation()}>
-        <button className="nd-close" onClick={onClose} aria-label="close">
-          ×
-        </button>
+        <div className="nd-header">
+          <h1 className="nd-title">{title}</h1>
+          <button className="nd-close" onClick={onClose} aria-label="close">
+            ×
+          </button>
+        </div>
 
-        <h1 className="nd-title">{title}</h1>
+        <div className="nd-body">
+          <ProgressBar done={done} total={total} />
 
-        <ProgressBar done={done} total={total} />
+          <section className="nd-section">
+            <h2 className="nd-h2">描述</h2>
+            <p className="nd-desc">{desc}</p>
+          </section>
 
-        <section className="nd-section">
-          <h2 className="nd-h2">描述</h2>
-          <p className="nd-desc">{desc}</p>
-        </section>
+          <Divider />
 
-        <Divider />
+          <section className="nd-section nd-section--tutorial">
+            <div className="nd-h2Row">
+              <h2 className="nd-h2">教程</h2>
+              <span className="nd-countBadge">共 {tutorialsItems.length} 条</span>
+            </div>
+            {tutorialsItems.length ? (
+              <ChecklistTable
+                nodeId={nodeId}
+                nodeLevel={node?.data?.level}
+                items={tutorialsItems}
+                checkedMap={nodeCheckedMap}
+                onToggleItem={onToggleItem}
+              />
+            ) : (
+              <div className="nd-empty">暂无教程</div>
+            )}
+          </section>
 
-        <section className="nd-section nd-section--tutorial">
-          <h2 className="nd-h2">教程</h2>
-          {tutorials.length ? (
-            <ChecklistTable
-              nodeId={nodeId}
-              items={tutorials}
-              checkedMap={nodeCheckedMap}
-              onToggleItem={onToggleItem}
-            />
-          ) : (
-            <div className="nd-empty">暂无教程</div>
-          )}
-        </section>
+          <Divider />
 
-        <Divider />
-
-        <section className="nd-section nd-section--problem">
-          <h2 className="nd-h2">习题-检测学习成果</h2>
-          {problems.length ? (
-            <ChecklistTable
-              nodeId={nodeId}
-              items={problems}
-              checkedMap={nodeCheckedMap}
-              onToggleItem={onToggleItem}
-            />
-          ) : (
-            <div className="nd-empty">暂无习题</div>
-          )}
-        </section>
+          <section className="nd-section nd-section--problem">
+            <div className="nd-h2Row">
+              <h2 className="nd-h2">习题-检测学习成果</h2>
+              <span className="nd-countBadge">共 {problemsItems.length} 条</span>
+            </div>
+            {problemsItems.length ? (
+              <ChecklistTable
+                nodeId={nodeId}
+                nodeLevel={node?.data?.level}
+                items={problemsItems}
+                checkedMap={nodeCheckedMap}
+                onToggleItem={onToggleItem}
+              />
+            ) : (
+              <div className="nd-empty">暂无习题</div>
+            )}
+          </section>
+        </div>
       </aside>
     </div>
   )

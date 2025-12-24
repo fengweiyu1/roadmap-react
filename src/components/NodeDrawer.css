@@ -16,8 +16,19 @@
   background: #fff;
   border-left: 1px solid rgba(15, 23, 42, 0.08);
   box-shadow: -24px 0 60px rgba(15, 23, 42, 0.12);
-  padding: 28px 28px 32px;
-  overflow: auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部区域（固定） */
+.nd-header{
+  position: sticky;
+  top: 0;
+  padding: 24px 24px 18px;
+  background: #fff;
+  z-index: 1;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
 }
 
 /* 关闭按钮 */
@@ -39,7 +50,13 @@
 .nd-title{
   font-size: 34px;
   font-weight: 800;
-  margin: 10px 0 22px;
+  margin: 6px 36px 12px 0;
+}
+
+.nd-body{
+  padding: 0 24px 24px;
+  overflow: auto;
+  flex: 1;
 }
 
 .nd-section{ margin-top: 18px; }
@@ -70,6 +87,7 @@
   border-radius: 14px;
   overflow: hidden;
   background: rgba(248, 250, 252, 0.65);
+  position: relative;
 }
 
 /* 超过 5 条才滚动（每行约 52px，可按你实际调） */
@@ -86,9 +104,32 @@
 
 .nd-row{
   background: #fff;
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
 }
 .nd-row + .nd-row{
   border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.nd-row:hover{
+  background: rgba(248, 250, 252, 0.85);
+  transform: translateY(-1px);
+  box-shadow:
+    0 8px 18px rgba(15, 23, 42, 0.08),
+    0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+.nd-fade{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.92) 100%
+  );
 }
 
 .nd-td{
@@ -99,14 +140,19 @@
 .nd-tdTitle{
   font-size: 16px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .nd-link{
   color: rgba(15, 23, 42, 0.9);
   text-decoration: none;
+  transition: color 160ms ease;
 }
 .nd-link:hover{
   text-decoration: underline;
+  color: rgba(37, 99, 235, 0.9);
 }
 
 .nd-tdGo{
@@ -128,6 +174,20 @@
 }
 .nd-go:hover{
   background: #fff;
+}
+
+.nd-fade{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.92) 100%
+  );
 }
 
 
@@ -172,6 +232,23 @@
 /* 习题：更像刷题列表 */
 .nd-section--problem .nd-tableWrap.is-scroll {
   max-height: 260px;
+}
+
+.nd-h2Row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.nd-countBadge{
+  font-size: 13px;
+  color: rgba(107, 114, 128, 0.95);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  font-weight: 600;
 }
 
 
@@ -258,4 +335,29 @@
   text-align: right;
   font-weight: 700;
   color: rgba(15, 23, 42, 0.55);
+}
+
+.nd-h2Row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.nd-countBadge{
+  font-size: 13px;
+  color: rgba(107, 114, 128, 0.95);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  font-weight: 600;
+}
+
+.nd-dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.04);
+  flex-shrink: 0;
 }
