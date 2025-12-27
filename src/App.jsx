@@ -67,6 +67,7 @@ export default function App() {
   // ✅ 只在 App 顶层绑定一次 message，不会重复绑
   useEffect(() => {
     function onMessage(e) {
+      console.log('[roadmap] message received:', e.origin, e.data)
       if (e.data?.type === 'SET_USER' && e.data.email) {
         window.__ROADMAP_USER_EMAIL__ = e.data.email
         console.log('[roadmap] user bound:', e.data.email)
