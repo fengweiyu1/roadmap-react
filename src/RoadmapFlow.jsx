@@ -193,7 +193,12 @@ const usNodes = [
         { id: 'dw-1', title: '数据仓库八股文', url: 'https://xiaowantree.com/shu-ju-cang-ku-ba-gu/' },
         { id: 'dw-2', title: '新手如何快速入门《大数据之路》选读', url: 'https://xiaowantree.com/xin-shou-ru-he-xue-xi-a-li-da-shu-ju-zhi-lu/' },
       ],
+      tutorialsNotion: [
+        { id: 't1-notion', title: '数据仓库八股文', url: '...' },
+        { id: 't2-notion', title: '新手如何快速入门', url: '...' },
+  ],
       problems: [],
+      problemsNotion:[],
     },
   },
 
@@ -312,6 +317,8 @@ const usNodes = [
     data: {
       label: '数组与字符串',
       level: 'low',
+      notionUrl: 'https://www.notion.so/embed/xxxxxx', 
+      practiceNotionUrl: 'https://xxxx', // 习题 Notion（你原来 notionUrl 建议改成这个
       description: '数组与字符串基础题型。',
       plan: '1天',
       tutorials: [
@@ -1758,6 +1765,7 @@ export default function RoadmapFlow({ mode = 'de' }) {
       </ReactFlow>
 
       <NodeDrawer
+        mode={mode} 
         node={activeNode}
         onClose={() => setActiveNode(null)}
         progressMap={progressMap}
