@@ -176,7 +176,104 @@ curl -s https://xiaowantree.com/roadmap/ | rg "index-.*\\.js|index-.*\\.css" -o
 ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes ubuntu@119.28.179.118 "ls -lt /home/ubuntu/ghost-blog/roadmap-dist/assets | head -n 8"
 ```
 
-## 10. 同步到 GitHub
+## 10. 部署到你自己的服务器（必须写的代码）
+
+如果你要把项目迁移到你自己的域名和服务器，至少要改这 3 个地方：
+
+1. `vite.config.js` 的 `base`
+2. `vite.config.js` 的 `/api` 代理目标
+3. 服务器（如 Nginx）的静态目录和 `/api` 反向代理
+
+### 10.1 推荐把 `vite.config.js` 改成环境变量版本
+
+把 `vite.config.js` 改成下面这样（推荐）：
+
+```js
+import { defineConfig, loadEnv } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+  const base = env.VITE_BASE_PATH || '/roadmap/'
+  const apiTarget = env.VITE_API_TARGET || 'https://xiaowantree.com'
+
+  return {
+    base,
+    plugins: [react()],
+    server: {
+      proxy: {
+        '/api': {
+          target: apiTarget,
+          changeOrigin: true,
+          secure: false,
+        },
+      },
+    },
+  }
+})
+```
+
+### 10.2 新建生产环境变量
+
+在项目根目录新建 `.env.production`：
+
+```bash
+VITE_BASE_PATH=/roadmap/
+VITE_API_TARGET=https://your-domain.com
+```
+
+说明：
+
+- 如果你要部署在根路径，把 `VITE_BASE_PATH` 改成 `/`
+- 如果后端 API 不在同域，`VITE_API_TARGET` 写后端完整域名
+
+### 10.3 Nginx 配置示例（可直接改）
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    # 前端静态目录（上传 dist 的位置）
+    root /var/www/roadmap;
+    index index.html;
+
+    # 前端站点
+    location /roadmap/ {
+        try_files $uri $uri/ /roadmap/index.html;
+    }
+
+    # API 反向代理
+    location /api/ {
+        proxy_pass http://127.0.0.1:2368/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+### 10.4 你的服务器部署命令模板
+
+```bash
+# 1) 本地构建
+npm run build
+
+# 2) 上传到你的服务器静态目录
+rsync -avz --delete dist/ user@your-server:/var/www/roadmap/
+
+# 3) 重载 Nginx
+ssh user@your-server "sudo nginx -t && sudo systemctl reload nginx"
+```
+
+### 10.5 最终访问地址如何判断
+
+- `VITE_BASE_PATH=/roadmap/` -> `https://your-domain.com/roadmap/`
+- `VITE_BASE_PATH=/` -> `https://your-domain.com/`
+
+## 11. 同步到 GitHub
 
 示例：推送到 `newlevi` 分支
 
@@ -192,7 +289,7 @@ git push origin HEAD:newlevi
 git ls-remote --heads origin newlevi
 ```
 
-## 11. URL 健康检查（可选）
+## 12. URL 健康检查（可选）
 
 可以批量检查 `src` 内 URL 是否返回 4xx/5xx（不改代码）：
 
@@ -202,7 +299,7 @@ rg -n --no-heading --glob '!src/RoadmapFlow.backup-*.jsx' "url:\\s*'[^']+'" src
 
 建议在部署前后都做一次抽样检查，重点看刚改过的链接。
 
-## 12. 常见问题排查
+## 13. 常见问题排查
 
 1. 端口 5173 已占用  
 使用 `lsof -nP -iTCP:5173 -sTCP:LISTEN` 查占用进程，确认是否已有 Vite 在跑。
@@ -210,7 +307,7 @@ rg -n --no-heading --glob '!src/RoadmapFlow.backup-*.jsx' "url:\\s*'[^']+'" src
 2. 页面没更新  
 先强刷浏览器缓存，再检查线上是否引用了新的 `index-xxxx.js`。
 
-3. `scp` 上传失败  
+3. `scp` 或 `rsync` 上传失败  
 检查私钥路径、服务器 IP、目标目录权限、网络连通性。
 
 4. 本地接口请求失败  
