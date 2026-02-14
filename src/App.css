@@ -90,6 +90,28 @@
   background: #ef4444; /* red */
 }
 
+.stage-contact-blink {
+  color: #2563eb;
+  animation: stage-contact-blink 1.4s ease-in-out infinite;
+  text-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+}
+
+.stage-contact-blink a {
+  color: inherit;
+}
+
+@keyframes stage-contact-blink {
+  0%,
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 6px rgba(37, 99, 235, 0.35);
+  }
+  50% {
+    opacity: 0.35;
+    text-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
+  }
+}
+
 
 
 

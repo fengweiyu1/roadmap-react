@@ -65,44 +65,6 @@ const nodeTypes = {
 // ✅ 固定参数（roadmapId 可以先写死）
 const ROADMAP_ID = 'china_de_roadmap'
 
-const US_EDGE_TONE_BY_NODE = {
-  'phase-1': 'blue',
-  'p1-python': 'blue',
-  'p1-advanced-sql': 'blue',
-  'p1-linux-git': 'blue',
-  'p1-docker': 'blue',
-  'phase-2': 'yellow',
-  'p2-modeling': 'yellow',
-  'p2-cloud-dw': 'yellow',
-  'p2-Lakehouse': 'yellow',
-  'p2-databases': 'yellow',
-  'phase-3': 'green',
-  'p3-etl': 'green',
-  'p3-orchestration': 'green',
-  'p3-automation': 'green',
-  'phase-4': 'purple',
-  'p4-distributed': 'purple',
-  'p4-spark': 'purple',
-  'p4-realtime': 'purple',
-  'p4-optional': 'purple',
-}
-
-const US_EDGE_COLOR = {
-  blue: '#6ea8e4',
-  yellow: '#d8a845',
-  green: '#88b36a',
-  purple: '#a48fce',
-  neutral: '#9ca3af',
-}
-
-function getUsEdgeColor(edge) {
-  const tone =
-    US_EDGE_TONE_BY_NODE[edge.source] ||
-    US_EDGE_TONE_BY_NODE[edge.target] ||
-    'neutral'
-  return US_EDGE_COLOR[tone] || US_EDGE_COLOR.neutral
-}
-
 
 
 const usNodes = [
@@ -232,16 +194,7 @@ const usNodes = [
       lines: ['Fact Tables / Dimension Tables'],
       tone: 'yellow',
       description: 'Fact Tables / Dimension Tables / Data Modeling 的学习.',
-      tutorials: [
-        { id: 'p2-modeling-part-1', title: 'Part 1: Data Modeling', url: 'https://xiaowantree.com/part-1-data-modeling/' },
-      ],
-      tutorialsNotion: [
-        {
-          id: 'p2-modeling-notion-structure',
-          title: 'Our Structure (Notion)',
-          url: 'https://www.notion.so/862801739/Our-Structure-29d88c88a4fc80a7a3d8ca884e45d4cc?source=copy_link',
-        },
-      ],
+      tutorials: [],
       problems: [],
     },
   },
@@ -255,16 +208,7 @@ const usNodes = [
       lines: ['ETL / SQL数据库与NoSQL数据库 '],
       tone: 'yellow',
       description: 'AWS / Snowflake / BigQuery.',
-      tutorials: [
-        { id: 'p2-cloud-dw-part-2', title: 'Part 2: Data Warehouse', url: 'https://xiaowantree.com/part-2-data-warehouse/' },
-      ],
-      tutorialsNotion: [
-        {
-          id: 'p2-cloud-dw-notion-structure',
-          title: 'Our Structure (Notion)',
-          url: 'https://www.notion.so/862801739/Our-Structure-29d88c88a4fc80a7a3d8ca884e45d4cc?source=copy_link',
-        },
-      ],
+      tutorials: [],
       problems: [],
     },
   },
@@ -278,16 +222,7 @@ const usNodes = [
       tone: 'yellow',
       accent: 'dbt',
       description: 'lakehouse .',
-      tutorials: [
-        { id: 'p2-lakehouse-part-3', title: 'Part 3: Lakehouse', url: 'https://xiaowantree.com/part-3-lakehouse/' },
-      ],
-      tutorialsNotion: [
-        {
-          id: 'p2-lakehouse-notion-structure',
-          title: 'Our Structure (Notion)',
-          url: 'https://www.notion.so/862801739/Our-Structure-29d88c88a4fc80a7a3d8ca884e45d4cc?source=copy_link',
-        },
-      ],
+      tutorials: [],
       problems: [],
     },
   },
@@ -301,29 +236,6 @@ const usNodes = [
       lines: ['S3 / 计算资源（Compute）'],
       tone: 'yellow',
       description: 'system design basics.',
-      tutorials: [
-        { id: 'p2-databases-part-4', title: 'Part 4: System Design', url: 'https://xiaowantree.com/part-4-system-design/' },
-      ],
-      tutorialsNotion: [
-        {
-          id: 'p2-databases-notion-structure',
-          title: 'Our Structure (Notion)',
-          url: 'https://www.notion.so/862801739/Our-Structure-29d88c88a4fc80a7a3d8ca884e45d4cc?source=copy_link',
-        },
-      ],
-      problems: [],
-    },
-  },
-  {
-    id: 'p2-data-quality',
-    type: 'milestone',
-    position: { x: 360, y: 680 },
-    style: { width: 208 },
-    data: {
-      label: 'Data Quality',
-      lines: [],
-      tone: 'yellow',
-      description: 'Data quality checks and monitoring.',
       tutorials: [],
       problems: [],
     },
@@ -389,7 +301,7 @@ const usNodes = [
   {
     id: 'p4-spark',
     type: 'milestone',
-    position: { x: 960, y: 370 },
+    position: { x: 960, y: 350 },
     style: { width: 208 },
     data: {
       label: 'Apache Spark & PySpark',
@@ -404,7 +316,7 @@ const usNodes = [
   {
     id: 'p4-realtime',
     type: 'milestone',
-    position: { x: 960, y: 520 },
+    position: { x: 960, y: 480 },
     style: { width: 208 },
     data: {
       label: 'Real-Time Data Streaming',
@@ -418,7 +330,7 @@ const usNodes = [
   {
     id: 'p4-optional',
     type: 'milestone',
-    position: { x: 960, y: 660 },
+    position: { x: 960, y: 580 },
     style: { width: 208 },
     data: {
       label: 'Optional: Kafka / Flink',
@@ -518,7 +430,6 @@ const usEdges = [
   { id: 'us-p2-1', source: 'p2-modeling', target: 'p2-cloud-dw', sourceHandle: 'bottom', targetHandle: 'top' },
   { id: 'us-p2-2', source: 'p2-cloud-dw', target: 'p2-Lakehouse', sourceHandle: 'bottom', targetHandle: 'top' },
   { id: 'us-p2-3', source: 'p2-Lakehouse', target: 'p2-databases', sourceHandle: 'bottom', targetHandle: 'top' },
-  { id: 'us-p2-4', source: 'p2-databases', target: 'p2-data-quality', sourceHandle: 'bottom', targetHandle: 'top' },
 
   { id: 'us-p3-0', source: 'phase-3', target: 'p3-etl', sourceHandle: 'bottom', targetHandle: 'top' },
   { id: 'us-p3-1', source: 'p3-etl', target: 'p3-orchestration', sourceHandle: 'bottom', targetHandle: 'top' },
@@ -535,17 +446,8 @@ const usEdges = [
 ].map((e) => ({
   ...e,
   type: 'straight',
-  markerEnd: {
-    type: MarkerType.ArrowClosed,
-    color: getUsEdgeColor(e),
-    width: 16,
-    height: 16,
-  },
-  style: {
-    stroke: getUsEdgeColor(e),
-    strokeWidth: 2.4,
-    strokeLinecap: 'round',
-  },
+  markerEnd: { type: MarkerType.ArrowClosed },
+  style: { stroke: '#94a3b8', strokeWidth: 2 },
 }))
 
 // ================= Nodes（保持你原样）=================
@@ -560,7 +462,7 @@ const initialNodes = [
       description: '整体学习路线总览。',
       plan: '1天',
       tutorials: [
-        { id: 'websit-turtorial', title: '数据工程入门路线图(必看)', url: 'https://xiaowantree.com/shu-ju-gong-cheng-ru-men-lu-xian-tu/' },
+        { id: 'websit-turtorial', title: '网站使用教程', url: '/blog/linked-list-basic' },
       ],
       problems: [],
     },
@@ -632,7 +534,7 @@ const initialNodes = [
       description: 'Hive 是构建在 Hadoop 之上的 离线数据仓库工具，用于大规模数据的分析与统计查询，数据实际存储在 HDFS 中。学习时应关注 表结构设计与查询执行方式，而不是把 Hive 当作传统数据库来使用。',
       plan: '1天',
       tutorials: [
-        { id: 'Hive-1', title: 'Hive面试宝典:从核心架构到调优实战', url: 'https://xiaowantree.com/hivemian-shi-bao-dian-cong-he-xin-jia-gou-dao-diao-you-shi-zhan/' },
+        { id: 'Hive-1', title: 'Hive面试宝典:从核心架构到调优实战', url: 'https://xiaowantree.com/hivemian-shi-bao-dian-cong-he-xin-gai-gou-dao-diao-you-shi-zhan' },
         { id: 'Hive-2', title: 'Hive 元数据 Metastore 详解:表、分区与 Schema 管理', url: 'https://xiaowantree.com/hive-yuan-shu-ju-metastore-xiang-jie-biao-fen-qu-yu-schema-guan-li' },
         { id: 'Hive-3', title: '如何用 Hive 优化查询：分区、分桶与索引', url: 'https://xiaowantree.com/ru-he-yong-hive-you-hua-cha-xun-fen-qu-fen-tong-yu-suo-yin' },
         { id: 'Hive-4', title: 'Hive 与传统数据库的对比：适用场景与局限', url: 'https://xiaowantree.com/hive-yu-chuan-tong-shu-ju-ku-de-dui-bi-gua-yong-chang-jing-ju-xian-yu-mian-shi-zhi-nan' },
@@ -732,7 +634,6 @@ const initialNodes = [
       description: 'SELECT / JOIN / GROUP BY。',
       plan: '1天',
       tutorials: [
-        { id: 'sql-basic-0', title: '高频SQL题', url: 'https://xiaowantree.com/gao-pin-sqlti/' },
         { id: 'sql-basic-1', title: 'SQL 基础入门与数据库基础知识总结', url: 'https://xiaowantree.com/sql-ji-chu-ru-men-yu-shu-ju-ku-ji-chu-zhi-shi-zong-jie/' },
         { id: 'sql-basic-2', title: '校招必备！SQL连续登录问题完全攻略', url: 'https://xiaowantree.com/sql1/' },
         { id: 'sql-basic-3', title: '行转列与列转行完全攻略', url: 'https://xiaowantree.com/sql-xing-zhuan-lie-yu-lie-zhuan-xing-wan-quan-gong-lue/' },
@@ -770,10 +671,7 @@ const initialNodes = [
       level: 'low',
       description: '中等难度 SQL 练习。',
       plan: '1天',
-      tutorials: [
-        { id: 'sql-mid-advanced-interview', title: '高级SQL 面试题', url: 'https://xiaowantree.com/gao-ji-sql-mian-shi-ti/' },
-        { id: 'sql-mid-window-interview', title: 'SQL分析函数面试题', url: 'https://xiaowantree.com/sql-fen-xi-han-shu-mian-shi-ti/' },
-      ],
+      tutorials: [],
       problems: [
         { id: 'sql-176', title: '「中级」176. 第二高的薪水', url: 'https://leetcode.cn/problems/second-highest-salary/' },
         { id: 'sql-177', title: '「中级」177. 第 N 高的薪水', url: 'https://leetcode.cn/problems/nth-highest-salary/' },
@@ -952,7 +850,8 @@ const initialNodes = [
         { id: 'flink-4', title: '《Flink SQL 上手：用 SQL 做实时计算》', url: 'https://xiaowantree.com/flink-sql-shang-shou-shang-he-xin-yuan-li-yu-ji-chu-yu-fa/' },
       ],
       problems: [
-
+        { id: 'flink-p1', title: 'Flink 练习-1', url: '/leetcode/flink-1' },
+        { id: 'flink-p2', title: 'Flink 练习-2', url: '/leetcode/flink-2' },
       ],
     },
   },
@@ -978,26 +877,6 @@ const initialNodes = [
       ],
       problems: [
         { id: 'kafka-p1', title: 'Kafka常见问题', url: 'https://xiaowantree.com/kafkachang-jian-wen-ti/' },
-      ],
-    },
-  },
-
-  // ===================== hard sql =====================
-  {
-    id: '16',
-    type: 'roadmap',
-    position: { x: 530, y: 500 },
-    data: {
-      label: 'hard sql',
-      level: 'mid',
-      description: '高难度 SQL 练习与面试题。',
-      plan: '2天',
-      tutorials: [],
-      problems: [
-        { id: 'sql-185', title: '「高级」185. 部门工资前三高的所有员工', url: 'https://leetcode.cn/problems/department-top-three-salaries/' },
-        { id: 'sql-262', title: '「高级」262. 行程和用户', url: 'https://leetcode.cn/problems/trips-and-users/' },
-        { id: 'sql-571', title: '「高级」571. 根据频次求中位数', url: 'https://leetcode.cn/problems/find-median-given-frequency-of-numbers/' },
-        { id: 'sql-579', title: '「高级」579. 员工累计薪水', url: 'https://leetcode.cn/problems/find-cumulative-salary-of-an-employee/' },
       ],
     },
   },
@@ -1170,10 +1049,12 @@ const initialNodes = [
       description: '系统设计/业务场景综合题。',
       plan: '3天',
       tutorials: [
- 
+        { id: 'scene-1', title: '场景题回答框架', url: '/blog/scenario-framework' },
+        { id: 'scene-2', title: '数据链路设计思路', url: '/blog/pipeline-design' },
       ],
       problems: [
-
+        { id: 'scene-p1', title: '场景题练习-1', url: '/blog/scenario-practice-1' },
+        { id: 'scene-p2', title: '场景题练习-2', url: '/blog/scenario-practice-2' },
       ],
     },
   },

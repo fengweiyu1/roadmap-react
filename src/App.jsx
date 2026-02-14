@@ -51,8 +51,10 @@ import RoadmapFlow from './RoadmapFlow'
 
 // 通用页面壳：DE / US 先复用同一套 UI
 function RoadmapShell({ mode }) {
+  const shellClass = mode === 'us' ? 'mode-shell mode-us' : 'mode-shell mode-de'
+
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+    <div className={shellClass} style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
         <StageLegend mode={mode} />
       </div>
