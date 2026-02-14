@@ -18,12 +18,15 @@ function NodeProgressBar({ done = 0, total = 0 }) {
   )
 }
 
-export default function RoadmapNode({ data }) {
+export default function RoadmapNode({ data, id }) {
   const dot = levelColor[data?.level]
   const p = data?.progress // {done,total}
 
+  const isRootUs = id === '0' && data?.mode === 'us'
+  const nodeClass = isRootUs ? 'rm-node rm-node--root-us' : 'rm-node'
+
   return (
-    <div className="rm-node">
+    <div className={nodeClass}>
       {dot && <span className="rm-dot" style={{ background: dot }} />}
       <div className="rm-label">{data?.label}</div>
 
